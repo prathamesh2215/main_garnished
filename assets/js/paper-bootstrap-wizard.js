@@ -24,21 +24,36 @@ transparent = true;
             $('[rel="tooltip"]').tooltip();
 
             // Code for the Validator
-         //    var $validator = $('.wizard-card form').validate({
-        	// 	  rules: {
-        	// 	    firstname: {
-        	// 	      required: true,
-        	// 	      minlength: 3
-        	// 	    },
-        	// 	    lastname: {
-        	// 	      required: true,
-        	// 	      minlength: 3
-        	// 	    },
-        	// 	    email: {
-        	// 	      required: true
-        	// 	    }
-         //        },
-        	// });
+            var $validator = $('.wizard-card form').validate({
+        		  rules: {
+        		    work_address: {
+        		      required: true,
+        		    },
+        		    work_company: {
+        		      required: true,
+        		      // minlength: 3
+        		    },
+        		    email: {
+        		      required: true
+        		    },
+                    fullname: {
+                      required: true,
+                      // minlength: 3
+                    },
+                    password: {
+                      required: true,
+                      // minlength: 3
+                    },
+                    job_title: {
+                      required: true,
+                      // minlength: 3
+                    },
+                    mobile_number: {
+                      required: true,
+                      // minlength: 3
+                    }
+                },
+        	});
 
             // Wizard Initialization
           	$('.wizard-card').bootstrapWizard({

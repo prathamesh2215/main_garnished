@@ -3,6 +3,43 @@
 
 <head>
         <?php $this->load->view('st_head'); ?>
+    <style type="text/css">
+        #suggesstion-box-main{
+
+            max-height: 150px;
+            overflow: auto;
+            border: 1px solid aliceblue;
+        }
+
+        #suggesstion-box
+        {
+            list-style: none;
+        }
+
+        #suggesstion-box li
+        {
+            float: left;
+            margin-left: -15px;
+        }
+
+        select {
+  /* for Firefox */
+  -moz-appearance: none;
+  /* for Chrome */
+  -webkit-appearance: none;
+}
+
+/* For IE10 */
+select::-ms-expand {
+  display: none;
+}
+
+select.form-control:not([size]):not([multiple]) {
+    height: 60px;
+    width: 200px;
+    border-radius: 15px;
+}
+    </style>
     </head>
     <body>
 
@@ -44,12 +81,40 @@
             <!--=============== Divider Section ===============-->
             <section class="divider padding-small has-pattern bg-primary">
                 <div class="container text-center">
-                    <p>Call Us for Home Delievery <a href="tel:9870988764">987 098 8764</a></p>
+
+                   
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <select class="form-control">
+                            <option>Mumbai</option>
+                            <option>Pune</option>
+                        </select>
+                      </div>
+                      <input id="work_address" onkeyup="initService(this.value,'work')" name="work_address" type="text" style="height: 60px;border-radius: 15px;" class="form-control" placeholder="Enter Address of the building you work in">
+                        
+                    </div>
+                    <div id="suggesstion-box-main">
+                        <ul id="suggesstion-box"></ul>
+                    </div>
+                    
                 </div>
             </section>
             <!--=============== /. Divider Section ===============-->
 
-
+            <div class="search-popup has-pattern">
+                <div class="search-popup-inner d-flex align-items-center justify-content-center">
+                    <div class="close-btn"> CLOSE
+                        <i class="fa fa-close"></i>
+                    </div>
+                    <form action='#' id='search-form' method='post'><input type='hidden' name='form-name' value='search-form' />
+                        <h2 class="text-center">Search Our Website</h2>
+                        <div class="form-group">
+                            <input type="search" class="form-control" placeholder="What are you searching for...">
+                            <button type="submit">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <!--=============== About Section ===============-->
             <section class="about">
                 <div class="container text-center">
@@ -1044,7 +1109,56 @@
         <!--=============== Footer ===============-->
             <?php $this->load->view('st_script'); ?>
         <!--=============== /. Footer ===============-->
+        <!-- Autosuggestion places Js -->
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRmGd2_gbD_oFrN8CFO3e-ONavXVt4a58&libraries=places"
+        async defer></script>
         
+        <script type="text/javascript">
+
+            function initService(search_key) {
+
+                console.log(search_key);
+                if(search_key=="")
+                {
+
+                    $('#suggesstion-box').html('');
+                    $('#suggesstion-box-main').hide('');
+                    return false;
+                }
+
+                var displaySuggestions = function(predictions, status) {
+                  if (status != google.maps.places.PlacesServiceStatus.OK) {
+                    html = '<li>No record found...</li>';
+                    $('#suggesstion-box').html('');
+                    $('#suggesstion-box').append(html);
+                    $('#suggesstion-box').show('');
+                    return false;
+                  }
+
+                   $('#suggesstion-box-main').show();
+                   $('#suggesstion-box').html('');
+                   $('#suggesstion-box').show('');
+                  predictions.forEach(function(prediction) {
+                    var li = document.createElement('li');
+                   
+                    li.appendChild(document.createTextNode(prediction.description));
+
+                    html = '<li onclick="setValue(\''+prediction.description+'\')">'+prediction.description+'</li>';
+                    $('#suggesstion-box').append(html);
+                    // document.getElementById('sugges/stion-box').appendChild(html);
+                  });
+                };
+
+                var service = new google.maps.places.AutocompleteService();
+                service.getQueryPredictions({ input: search_key }, displaySuggestions);
+            }
+
+            $('#suggesstion-box-main').hide();
+            $(document).on("click", function (e) {
+        
+                $('#suggesstion-box-main').hide();
+            });
+        </script>
     </body>
 
 

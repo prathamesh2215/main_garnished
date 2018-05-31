@@ -1,0 +1,6 @@
+[03-Nov-2017 12:05:46 Asia/Kolkata] PHP Fatal error:  Call to undefined function sqlInjection() in /home/kumar7/public_html/idbpanel/load_vendors.php on line 942
+[03-Nov-2017 12:06:11 Asia/Kolkata] PHP Fatal error:  Call to undefined function sqlInjection() in /home/kumar7/public_html/idbpanel/load_vendors.php on line 942
+[29-Dec-2017 17:07:59 Asia/Calcutta] PHP Fatal error:  Call to undefined function lookupValue() in /home/indiapre/public_html/idbpanel/edit_product_detail.php on line 99
+[15-Jan-2018 10:12:34 Asia/Calcutta] PHP Fatal error:  Call to undefined function getActiveStates() in /home/indiapre/public_html/idbpanel/ae_vendor.php on line 222
+[15-Jan-2018 10:12:39 Asia/Calcutta] PHP Fatal error:  Call to undefined function getActiveStates() in /home/indiapre/public_html/idbpanel/ae_vendor.php on line 222
+[16-Jan-2018 07:48:56 Asia/Calcutta] PHP Fatal error:  Call to undefined function getRecord() in /home/indiapre/public_html/idbpanel/ae_vendor.php on line 434

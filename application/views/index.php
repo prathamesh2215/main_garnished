@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zxx">
-
 <head>
         <?php $this->load->view('st_head'); ?>
     <style type="text/css">
@@ -37,7 +36,7 @@ select::-ms-expand {
 select.form-control:not([size]):not([multiple]) {
     height: 60px;
     width: 200px;
-    border-radius: 15px;
+    /*border-radius: 15px;*/
 }
     </style>
     </head>
@@ -79,24 +78,24 @@ select.form-control:not([size]):not([multiple]) {
 
 
             <!--=============== Divider Section ===============-->
-            <section class="divider padding-small has-pattern bg-primary">
-                <div class="container text-center">
+            <section class="divider padding-small has-pattern bg-primary" style="margin-top:-75px;padding: 7px 0 !important">
+                <div class="container text-center" >
 
-                   
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <select class="form-control">
-                            <option>Mumbai</option>
-                            <option>Pune</option>
-                        </select>
-                      </div>
-                      <input id="work_address" onkeyup="initService(this.value,'work')" name="work_address" type="text" style="height: 60px;border-radius: 15px;" class="form-control" placeholder="Enter Address of the building you work in">
-                        
-                    </div>
-                    <div id="suggesstion-box-main">
+                   <div id="suggesstion-box-main" style="z-index: -1">
                         <ul id="suggesstion-box"></ul>
                     </div>
-                    
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <select class="form-control" id="city_id">
+                            <?php
+                            foreach($cities as $city):
+                                echo '<option value="'.$city['city_id'].'">'.$city['city_name'].'</option>';
+                            endforeach;
+                            ?>
+                        </select>
+                      </div>
+                      <input id="work_address" onkeyup="initService(this.value,'work')" name="work_address" type="text" style="height: 60px;" class="form-control" placeholder="Enter Address of the building you work in">
+                    </div>
                 </div>
             </section>
             <!--=============== /. Divider Section ===============-->
@@ -1109,15 +1108,11 @@ select.form-control:not([size]):not([multiple]) {
         <!--=============== Footer ===============-->
             <?php $this->load->view('st_script'); ?>
         <!--=============== /. Footer ===============-->
-        <!-- Autosuggestion places Js -->
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRmGd2_gbD_oFrN8CFO3e-ONavXVt4a58&libraries=places"
-        async defer></script>
-        
+
         <script type="text/javascript">
 
             function initService(search_key) {
 
-                console.log(search_key);
                 if(search_key=="")
                 {
 
@@ -1126,31 +1121,32 @@ select.form-control:not([size]):not([multiple]) {
                     return false;
                 }
 
-                var displaySuggestions = function(predictions, status) {
-                  if (status != google.maps.places.PlacesServiceStatus.OK) {
-                    html = '<li>No record found...</li>';
-                    $('#suggesstion-box').html('');
-                    $('#suggesstion-box').append(html);
-                    $('#suggesstion-box').show('');
-                    return false;
-                  }
-
-                   $('#suggesstion-box-main').show();
-                   $('#suggesstion-box').html('');
-                   $('#suggesstion-box').show('');
-                  predictions.forEach(function(prediction) {
-                    var li = document.createElement('li');
-                   
-                    li.appendChild(document.createTextNode(prediction.description));
-
-                    html = '<li onclick="setValue(\''+prediction.description+'\')">'+prediction.description+'</li>';
-                    $('#suggesstion-box').append(html);
-                    // document.getElementById('sugges/stion-box').appendChild(html);
-                  });
-                };
-
-                var service = new google.maps.places.AutocompleteService();
-                service.getQueryPredictions({ input: search_key }, displaySuggestions);
+                var city_id = $('#city_id').val();
+                $.ajax({
+                    url: "<?php echo base_url() ?>home/getAddress",
+                    type: "POST",
+                    data :{'city_id':city_id,'search_key':search_key},
+                    contentType: "application/x-www-form-urlencoded",                     
+                    success: function(response) 
+                    {
+                         resp = JSON.parse(response);
+                         if(resp.length != 0)
+                         {
+                            $('#suggesstion-box-main').show();
+                            $.each( resp, function(key,value) {
+                              html = '<li onclick="setValue(\''+value['add_details']+'\')">'+value['add_details']+'</li>';
+                              $('#suggesstion-box').append(html);
+                             });
+                         }else
+                         {
+                             $('#suggesstion-box-main').hide();
+                         }
+                    },
+                    error: function (request, status, error) 
+                    {},
+                    complete: function()
+                    {}
+                });
             }
 
             $('#suggesstion-box-main').hide();
@@ -1158,7 +1154,17 @@ select.form-control:not([size]):not([multiple]) {
         
                 $('#suggesstion-box-main').hide();
             });
+
+             function setValue(val)
+            {
+                console.log(val);
+                $('#work_address').val(val);
+                $('#suggesstion-box').hide();
+            }
+
         </script>
+
+
     </body>
 
 

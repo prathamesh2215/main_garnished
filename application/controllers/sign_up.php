@@ -10,8 +10,10 @@ class Sign_up extends CI_Controller {
 
 	public function index()
 	{
-		$data['title'] = 'Sign Up';
-		$data['page']  = 'sign-up';
+		$this->load->model('home_model');
+		$data['title']  = 'Sign Up';
+		$data['page']   = 'sign-up';
+		$data['cities'] =  $this->home_model->getCity();
 		$this->load->view('sign_up',$data);
 	}
 

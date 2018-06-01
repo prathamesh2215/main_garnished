@@ -3,7 +3,7 @@
                 <div class="container">
                     <div class="navbar-header">
                         <!-- Navbar Brand -->
-                        <a href="index-2.html" class="navbar-brand">
+                        <a href="<?php echo base_url(); ?>" class="navbar-brand">
                             <img src="<?php echo base_url(); ?>img/logo-main-default.png" alt="spicy" class="img-fluid">
                         </a>
 

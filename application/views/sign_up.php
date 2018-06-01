@@ -84,30 +84,46 @@
         }
 
         .frmSearch {border: 1px solid #a8d4b1;background-color: #c6f7d0;margin: 2px 0px;padding:40px;border-radius:4px;}
-        #country-list{float:left;list-style:none;margin-top:-3px;padding:0;width:190px;position: absolute;}
-        #country-list li{padding: 10px; background: #f0f0f0; border-bottom: #bbb9b9 1px solid;}
-        #country-list li:hover{background:#ece3d2;cursor: pointer;}
-        #search-box{padding: 10px;border: #a8d4b1 1px solid;border-radius:4px;}
+       
 
         li span{
             margin-top:50px;
         }
 
-        #suggesstion-box-main{
+        #suggesstion-box-main,#suggesstion-box-main-2{
 
             max-height: 150px;
             overflow: auto;
             border: 1px solid aliceblue;
         }
 
-        #suggesstion-box
+        #suggesstion-box,#suggesstion-box-2
         {
             list-style: none;
         }
 
-        #suggesstion-box li
+        #suggesstion-box li,#suggesstion-box-2 li
         {
             margin-left: -15px;
+        }
+
+        select {
+          /* for Firefox */
+          -moz-appearance: none;
+          /* for Chrome */
+          -webkit-appearance: none;
+        }
+
+        /* For IE10 */
+        select::-ms-expand {
+          display: none;
+        }
+
+        select.form-control:not([size]):not([multiple]) {
+            height: 59;
+            width: 200px;
+            border: 1px solid #66615b;
+            /*border-radius: 15px;*/
         }
     </style>
 
@@ -185,15 +201,23 @@
                                             </div>
 
                                             <div class="col-sm-8 offset-sm-2">
-                                                <div class="form-group">
-                                                    <label>Work Address</label>
-                                                    <input id="work_address" onkeyup="initService(this.value,'work')" name="work_address" type="text" class="form-control" placeholder="Enter Address of the building you work in">
-                                                    <div id="suggesstion-box-main">
-                                                        <ul id="suggesstion-box"></ul>
-                                                    </div>
-                                                    <div  class="companyworkaddress">Don't know your company's address? <a href="javascript:void(0)" id="btn-srch-comp" > Search by company name</a></div>
-                                                    
+                                                <div class="input-group">
+                                                  <div class="input-group-prepend">
+                                                    <select class="form-control" id="city_id">
+                                                        <?php
+                                                        foreach($cities as $city):
+                                                            echo '<option value="'.$city['city_id'].'">'.$city['city_name'].'</option>';
+                                                        endforeach;
+                                                        ?>
+                                                    </select>
+                                                  </div>
+                                                  <input id="work_address" onkeyup="initService(this.value,'work')" name="work_address" type="text" style="height: 60px;" class="form-control" placeholder="Enter Address of the building you work in">
                                                 </div>
+                                                <div id="suggesstion-box-main">
+                                                    <ul id="suggesstion-box"></ul>
+                                                </div>
+                                                <div  class="companyworkaddress">Don't know your company's address? <a href="javascript:void(0)" id="btn-srch-comp" > Search by company name</a></div>
+                                                
                                             </div>
                                         </div>
 
@@ -206,12 +230,52 @@
 
                                             <div class="col-sm-8 offset-sm-2">
                                                 <div class="form-group">
-                                                    <label>Company</label>
-                                                    <input id="work_company" onkeyup="initService(this.value,'comp')" name="work_company" type="text" class="form-control" placeholder="Enter your company name">
-                                                    <div class="suggesstion-box-main" id="suggesstion-box-main-2">
-                                                        <ul class="suggesstion-box" id="suggesstion-box-2"></ul>
+                                                    <div class="input-group">
+                                                      <div class="input-group-prepend">
+                                                        <select class="form-control" id="city_id_2">
+                                                            <?php
+                                                            foreach($cities as $city):
+                                                                echo '<option value="'.$city['city_id'].'">'.$city['city_name'].'</option>';
+                                                            endforeach;
+                                                            ?>
+                                                        </select>
+                                                      </div>
+                                                      <input id="comp_name" onkeyup="getCompany(this.value,'work')" name="work_address" type="text" style="height: 60px;" class="form-control" placeholder="Enter Address of the building you work in">
                                                     </div>
+                                                    <div id="suggesstion-box-main-2">
+                                                        <ul id="suggesstion-box-2"></ul>
+                                                    </div>
+                                                    
                                                     <div  class="companyworkaddress"><a href="javascript:void(0)" id="btn-srch-addr">Go Back</a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" id="add-company" style="display: none">
+                                            <div align="center" class="col-sm-12 companypad">
+                                                <h2>Register your company</h2>
+                                            </div>
+
+                                            <div class="col-sm-8 offset-sm-2">
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label>Comany Name</label>
+                                                        <input name="comp_name_txt" type="text" class="form-control" placeholder="Enter your full name">
+                                                    </div>
+
+                                                    <div class="padding-top-25">
+                                                        <label>Employee Range (Employees who work in your office)</label>
+                                                        <select name="job_title" class="form-control" style="width: 100%;">
+                                                            <option>10-25</option>
+                                                            <option value="I am the office manager">25-50</option>
+                                                            <option value="I am not the office manager">> 50 </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="padding-top-25">
+                                                        <label>Company Address</label>
+                                                        <input name="comp_address" type="password" class="form-control" placeholder="Enter your password">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -242,7 +306,7 @@
 
                                                     <div class="padding-top-25">
                                                         <label>Job Title</label>
-                                                        <select name="job_title" class="form-control">
+                                                        <select name="job_title" class="form-control" style="width: 100%;">
                                                             <option>Select job title</option>
                                                             <option value="I am the office manager">I am the office manager</option>
                                                             <option value="I am not the office manager">I am not the office manager</option>
@@ -361,29 +425,91 @@
       // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
     function initService(search_key) {
-        var displaySuggestions = function(predictions, status) {
-          if (status != google.maps.places.PlacesServiceStatus.OK) {
-            alert(status);
-            return;
-          }
+       
+            if(search_key=="")
+            {
 
-           $('#suggesstion-box').show();
-           $('#suggesstion-box').html('');
-          predictions.forEach(function(prediction) {
-            var li = document.createElement('li');
-           
-            li.appendChild(document.createTextNode(prediction.description));
+                $('#suggesstion-box').html('');
+                $('#suggesstion-box-main').hide('');
+                return false;
+            }
 
-            html = '<li onclick="setValue(\''+prediction.description+'\')">'+prediction.description+'</li>';
-            $('#suggesstion-box').append(html);
-            // document.getElementById('sugges/stion-box').appendChild(html);
-          });
-        };
-
-        var service = new google.maps.places.AutocompleteService();
-        service.getQueryPredictions({ input: search_key }, displaySuggestions);
+            var city_id = $('#city_id').val();
+            $.ajax({
+                url: "<?php echo base_url() ?>home/getAddress",
+                type: "POST",
+                data :{'city_id':city_id,'search_key':search_key},
+                contentType: "application/x-www-form-urlencoded",                     
+                success: function(response) 
+                {
+                     resp = JSON.parse(response);
+                     if(resp.length != 0)
+                     {
+                        $('#suggesstion-box').html('');
+                        $('#suggesstion-box-main').show();
+                        $('#suggesstion-box').show();
+                        $.each( resp, function(key,value) {
+                          html = '<li onclick="setValue(\''+value['add_details']+'\')">'+value['add_details']+'</li>';
+                          $('#suggesstion-box').append(html);
+                         });
+                     }else
+                     {
+                         $('#suggesstion-box-main').hide();
+                     }
+                },
+                error: function (request, status, error) 
+                {},
+                complete: function()
+                {}
+            });
     }
 
+    function getCompany(search_key)
+    {
+        if(search_key=="")
+        {
+
+            $('#suggesstion-box-2').html('');
+            $('#suggesstion-box-main-2').hide('');
+            return false;
+        }
+
+        var city_id = $('#city_id').val();
+        $.ajax({
+            url: "<?php echo base_url() ?>home/getCompany",
+            type: "POST",
+            data :{'city_id':city_id,'search_key':search_key},
+            contentType: "application/x-www-form-urlencoded",                     
+            success: function(response) 
+            {
+                 resp = JSON.parse(response);
+                 if(resp.length != 0)
+                 {
+                    $('#suggesstion-box-2').html('');
+                    $('#suggesstion-box-main-2').show();
+                    $('#suggesstion-box-2').show();
+                    $.each( resp, function(key,value) {
+                      html = '<li onclick="setCompValue(\''+value['comp_name']+'\')">'+value['comp_name']+'</li>';
+                      $('#suggesstion-box-2').append(html);
+                     });
+                 }else
+                 {
+                    $('#suggesstion-box-2').html('');
+                     html = '<li onclick="addCompany()">No record found! add new company</li>';
+                    $('#suggesstion-box-2').append(html);
+                     // $('#suggesstion-box-main-2').hide();
+                 }
+            },
+            error: function (request, status, error) 
+            {},
+            complete: function()
+            {}
+        });
+    }
+
+    $('#suggesstion-box-main').hide();
+    $('#suggesstion-box-main-2').hide();
+    $('#suggesstion-box').show();
     $(document).ready(function(){
 
         $("#btn-srch-addr").click(function(){
@@ -415,12 +541,27 @@
     {
         console.log(val);
         $('#work_address').val(val);
-        $('#suggesstion-box').hide();
+        $('#suggesstion-box-main').hide();
     }
 
     $(document).on("click", function (e) {
         
         $('#suggesstion-box').hide();
     });
+
+    function setCompValue(val)
+    {
+        console.log(val);
+        $('#comp_name').val(val);
+        $('#suggesstion-box-main-2').hide();
+    }
+
+    function addCompany()
+    {
+        $('#search-by-company').hide();
+        $('#add-company').show();
+        $('#suggesstion-box-main-2').hide();
+    }
+
     </script>
 </html>

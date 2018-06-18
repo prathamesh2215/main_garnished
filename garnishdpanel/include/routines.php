@@ -1,5 +1,6 @@
 <?php
-include("../includes/sess.php");
+// include("../includes/sess.php");
+session_start();
 error_reporting(1);
 ini_set('display_errors','on');
 ini_set('memory_limit','-1');
@@ -18,11 +19,11 @@ if ($_SERVER['HTTP_HOST'] == "localhost" || preg_match("/^192\.168\.0.\d+$/",$_S
 	$dbpass = "";
 	if($_SERVER['HTTP_HOST'] == "localhost")
 	{
-		$BaseFolder = "http://localhost/garnishd/op1/garnishdpanel/";		
+		$BaseFolder = "http://localhost/garnishd/garnishdpanel/";		
 	}
 	else
 	{
-		$BaseFolder = "http://192.168.0.12/garnishd/op1/garnishdpanel/";	
+		$BaseFolder = "http://192.168.0.12/garnishd/garnishdpanel/";	
 	}
 	
 }
@@ -59,24 +60,28 @@ if (isset($_SESSION['panel_user']['email']) && strlen($_SESSION['panel_user']['e
 }
 if (isset($_POST['jsubmit']) && isset($_POST['emailid']) && isset($_POST['password']) && $_POST['jsubmit'] == "SiteLogin") 
 {
-	$email 		= $_POST['emailid'];
-	$password 	= $_POST['password'];
+	$email          = $_POST['emailid'];
+	$password       = $_POST['password'];
 	
-	$sql_login = "select * from tbl_cadmin_users where `email` = '".addslashes($email)."' ";
-	$result_login = mysqli_query($db_con,$sql_login) or die(mysqli_error($db_con));
+	// echo $email.'<=>'.$password;
+	// exit();
+
+	$sql_login      = "select * from tbl_cadmin_users where `email` = '".addslashes($email)."' ";
+	$result_login   = mysqli_query($db_con,$sql_login) or die(mysqli_error($db_con));
 	$num_rows_login = mysqli_num_rows($result_login);
 	if ($num_rows_login != 0) 
 	{
-		$row_login = mysqli_fetch_array($result_login);
+		$row_login   = mysqli_fetch_array($result_login);
 		$db_password = $row_login['password'];
-		$salt_value = $row_login['salt_value'];
-		$user_pass = md5($password.$salt_value);
-		
+		$salt_value  = $row_login['salt_value'];
+		$user_pass   = md5($password.$salt_value);
 		
 		if(strcmp($db_password,$user_pass) == 0)
 		{
 			$_SESSION['panel_user'] = array();		
 			$_SESSION['panel_user'] = $row_login;			
+			// print_r($_SESSION['panel_user']);
+			// exit();
 		}
 		else
 		{

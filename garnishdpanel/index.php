@@ -1,29 +1,37 @@
 <?php 
 include("include/routines.php");
-$sql_logged_user = "select * from tbl_cadmin_users where id = '".$logged_uid."'";
-$result_logged_user = mysqli_query($db_con,$sql_logged_user) or die(mysqli_error($db_con));
-$num_rows_logged_user = mysqli_fetch_array($result_logged_user);
-if (!(isset($_POST['password'])) && $num_rows_logged_user > 0) 
+
+if(isset($_SESSION['panel_user']))
 {
 	header("Location: view_dashboard.php?pag=Dashboard");
-	exit(0);
+	exit();
 }
-elseif(isset($_POST['password']))
-{
-	$password = $_POST['password'];
-	$sql_user = "select * from tbl_cadmin_users where id = '".$logged_uid."' and password = '".$password."'";
-	$result_user = mysqli_query($db_con,$sql_logged_user) or die(mysqli_error($db_con));
-	$num_rows_user = mysqli_query($db_con,$result_logged_user);	
-	if ($num_rows_user > 0) 
-	{
-		header("Location: index.php");
-		exit(0);
-	}
-	else
-	{
-		echo "Error";	
-	}
-}
+
+// $sql_logged_user      = "select * from tbl_cadmin_users where id = '".$logged_uid."'";
+// $result_logged_user   = mysqli_query($db_con,$sql_logged_user) or die(mysqli_error($db_con));
+// $num_rows_logged_user = mysqli_fetch_array($result_logged_user);
+
+// if (!(isset($_POST['password'])) && $num_rows_logged_user > 0) 
+// {
+// 	header("Location: view_dashboard.php?pag=Dashboard");
+// 	exit(0);
+// }
+// elseif(isset($_POST['password']))
+// {
+// 	$password = $_POST['password'];
+// 	$sql_user = "select * from tbl_cadmin_users where id = '".$logged_uid."' and password = '".$password."'";
+// 	$result_user = mysqli_query($db_con,$sql_logged_user) or die(mysqli_error($db_con));
+// 	$num_rows_user = mysqli_query($db_con,$result_logged_user);	
+// 	if ($num_rows_user > 0) 
+// 	{
+// 		header("Location: index.php");
+// 		exit(0);
+// 	}
+// 	else
+// 	{
+// 		echo "Error";	
+// 	}
+// }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -73,9 +81,9 @@ elseif(isset($_POST['password']))
 <div class="wrapper ">
 	<div class="login-body login-ptb cus_wrapper">    
             <div align="center" class="login-ptb">
-            	<a href="javascript:void(0);"><h1>Garnishd</h1><!-- <img src="images/logo.png" height="120" style="height:100px" /> --></a>
+            	<a href="javascript:void(0);"><h1>Garnished</h1><!-- <img src="images/logo.png" height="120" style="height:100px" /> --></a>
             </div>
-			<form method='post' action="#" class='form-validate' id="frm_login">
+			<form method='post' class='form-validate' id="frm_login">
 				<div class="control-group">
 					<div class="pw controls">
 						<input type="text" name="userid" id="userid" placeholder="Email" class="input-block-level" data-rule-required="true" data-rule-email="true">
@@ -106,13 +114,15 @@ elseif(isset($_POST['password']))
 					var emailid		= $.trim($('input[name="userid"]').val());
 					var password 	= $.trim($('input[name="password"]').val());					
 					$.post(location.href,{emailid:emailid,password:password,jsubmit:'SiteLogin'},function(data){
+						console.log(data);
 						if (data.length > 0) 
 						{
 							alert(data);
 						} 
 						else 
 						{
-							location.replace(location.href);
+							// location.replace(location.href);
+							window.location.assign("<?php echo $BaseFolder; ?>view_dashboard.php?pag=Dashboard");
 						}
 						return false;
 					});
